@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashFlowCo - Bem-vindo</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-default background-animation">
+    <div id="auth-container" class="auth-container">
+        <div class="auth-box">
+            <h2 id="auth-title">Login</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required autocomplete="email">
+                <input type="password" id="login-password" placeholder="Senha" required autocomplete="current-password">
+                <button type="submit">Entrar</button>
+            </form>
+            <form id="register-form" class="hidden">
+                 <input type="text" id="register-name" placeholder="Seu Nome Completo" required autocomplete="name">
+                 <input type="email" id="register-email" placeholder="Email" required autocomplete="email">
+                 <input type="password" id="register-password" placeholder="Senha (mín. 6 caracteres)" required autocomplete="new-password">
+                 <hr class="form-divider">
+                 <input type="text" id="register-function" placeholder="Sua Função/Cargo" required autocomplete="organization-title">
+                 <input type="number" id="register-age" placeholder="Sua Idade" required>
+                 <input type="tel" id="register-phone" placeholder="Telefone (ex: 11999998888)" required autocomplete="tel">
+                 <input type="text" id="register-address" placeholder="Endereço" required autocomplete="street-address">
+                 <hr class="form-divider">
+                 <input type="text" id="register-invite-code" placeholder="Código de Convite da Equipe" required>
+                 <button type="submit">Registar na Equipe</button>
+            </form>
+            <button id="toggle-auth-mode" class="toggle-button">Não tem uma conta? Registe-se</button>
+        </div>
+    </div>
+
+    <div id="notification-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <h2 id="notification-title">Aviso</h2>
+            <p id="notification-message">Sua mensagem aqui.</p>
+            <div class="modal-actions">
+                <button id="notification-close-btn" class="save-button">OK</button>
+            </div>
+        </div>
+    </div>
+    <div id="confirmation-modal" class="modal-backdrop hidden"></div>
+    <div id="prompt-modal" class="modal-backdrop hidden"></div>
+
+    <script type="module" src="auth.js"></script>
+</body>
+</html>

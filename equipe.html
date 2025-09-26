@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DashFlowCo - Equipe</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="logo.png" type="image/png">
+</head>
+<body class="theme-default background-animation">
+    <div id="app-wrapper" class="app-wrapper">
+        <aside class="sidebar">
+            <nav class="main-nav">
+                <h1 class="nav-title">DashFlowCo</h1>
+                <a href="quadro.html" class="nav-link">Quadro da Equipe</a>
+                <a href="tarefas.html" class="nav-link">Quadro Pessoal</a>
+                <a href="agenda.html" class="nav-link">Agenda</a>
+                <a href="equipe.html" class="nav-link active">Equipe</a>
+                <a href="chat.html" class="nav-link">Chat da Equipe</a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <span id="user-display-name">Carregando...</span>
+                    <button id="logout-button" title="Sair">Sair</button>
+                </div>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="main-header">
+                <div class="header-left">
+                    <button id="toggle-sidebar-btn" class="toggle-sidebar-btn" title="Esconder/Mostrar barra lateral">«</button>
+                    <h2>Membros da Equipe <span id="team-name-display" class="team-name"></span></h2>
+                </div>
+                 <div class="header-controls">
+                    <div id="theme-controls" class="theme-controls">
+                        <button id="theme-default" class="theme-btn" title="Tema Padrão"></button>
+                        <button id="theme-light" class="theme-btn" title="Tema Claro"></button>
+                        <button id="theme-dark" class="theme-btn" title="Tema Escuro"></button>
+                        <button id="toggle-animation-btn" class="theme-btn anim-btn" title="Ativar/Desativar Animação">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m2 12 5 2 2-5"></path><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path></svg>
+                        </button>
+                    </div>
+                    <div id="status-controls" class="status-controls">
+                        <span>Meu Status:</span>
+                        <button class="status-btn" data-status="Trabalhando">Trabalhando</button>
+                        <button class="status-btn" data-status="Pausa">Pausa</button>
+                        <button class="status-btn" data-status="Offline">Offline</button>
+                    </div>
+                     <button id="obs-toggle-btn" title="Avisos">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <div id="obs-notification-badge" class="hidden"></div>
+                    </button>
+                </div>
+            </header>
+            
+            <main id="team-container" class="team-container"></main>
+        </div>
+    </div>
+    
+    <div id="member-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+            <h2 id="modal-member-name">Nome do Funcionário</h2>
+            <div class="profile-details">
+                <p><strong>Email:</strong> <span id="modal-member-email"></span></p>
+                <p><strong>Cargo:</strong> <span id="modal-member-role"></span></p>
+                <p><strong>Função:</strong> <span id="modal-member-function"></span></p>
+                <p><strong>Idade:</strong> <span id="modal-member-age"></span></p>
+                <p><strong>Telefone:</strong> <span id="modal-member-phone"></span></p>
+                <p><strong>Endereço:</strong> <span id="modal-member-address"></span></p>
+            </div>
+            
+            <div id="admin-section" class="admin-section hidden">
+                <hr class="form-divider">
+                <h3>Ações de Gerenciamento</h3>
+                <div class="role-management">
+                    <label for="role-select">Alterar Cargo:</label>
+                    <select id="role-select">
+                        <option value="funcionário">Funcionário</option>
+                        <option value="gerente">Gerente</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <button id="save-role-btn">Salvar Cargo</button>
+                </div>
+                <button id="ban-member-btn" class="delete-button">Banir Funcionário</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="observations-panel">
+        <div class="obs-content">
+            <div class="obs-header">
+                <h2 class="sidebar-title">Avisos</h2>
+                <button id="obs-close-btn" class="modal-close-btn">&times;</button>
+            </div>
+            <div id="obs-list"></div>
+            <form id="obs-form">
+                <textarea id="obs-input" class="form-input" placeholder="Escreva um aviso..." rows="4" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="notification-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <h2 id="notification-title">Aviso</h2>
+            <p id="notification-message">Sua mensagem aqui.</p>
+            <div class="modal-actions">
+                <button id="notification-close-btn" class="save-button">OK</button>
+            </div>
+        </div>
+    </div>
+    <div id="confirmation-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <h2 id="confirmation-title">Confirmar Ação</h2>
+            <p id="confirmation-message">Você tem certeza?</p>
+            <div class="modal-actions">
+                <button id="confirm-cancel-btn" class="cancel-button">Cancelar</button>
+                <button id="confirm-yes-btn" class="save-button">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    <div id="prompt-modal" class="modal-backdrop hidden">
+        <div class="modal-content">
+            <h2 id="prompt-title">Entrada Necessária</h2>
+            <p id="prompt-message">Por favor, insira a informação abaixo:</p>
+            <input type="password" id="prompt-input" class="form-input">
+            <div class="modal-actions">
+                <button id="prompt-cancel-btn" class="cancel-button">Cancelar</button>
+                <button id="prompt-ok-btn" class="save-button">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="equipe.js"></script>
+</body>
+</html>
