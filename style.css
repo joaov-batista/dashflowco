@@ -28,6 +28,13 @@
     --fc-today-bg-color: rgba(159, 122, 234, 0.15);
 }
 
+/* Regra global corrigida que resolve o problema de layout */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 @keyframes animateGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
 body { 
@@ -74,7 +81,7 @@ body.theme-dark {
 }
 
 /* --- COMPONENTES GERAIS --- */
-.auth-container { display: flex; justify-content: center; align-items: center; height: 100vh; }
+.auth-container { display: flex; justify-content: center; align-items: center; height: 100vh; padding: 1rem; }
 .auth-box { background-color: var(--floating-bg); backdrop-filter: blur(10px); padding: 2.5rem; border-radius: 12px; box-shadow: 0 8px 30px var(--shadow-color); width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); }
 .auth-box form input, .auth-box form button { width: 100%; border-radius: 6px; padding: 0.8rem; margin-bottom: 1rem; }
 .auth-box form input { background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); }
@@ -135,7 +142,7 @@ body.theme-dark {
 .delete-list-btn:hover { color: var(--status-urgente); }
 .cards-container { padding: 0.8rem; overflow-y: auto; flex-grow: 1; min-height: 20px; }
 .list .add-card-form { padding: 0 0.8rem 0.8rem 0.8rem; }
-.list .add-card-form input { width: 100%; background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 0.8rem; border-radius: 6px; box-sizing: border-box; }
+.list .add-card-form input { width: 100%; background-color: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 0.8rem; border-radius: 6px; }
 .add-list-form-container { background-color: rgba(128, 128, 128, 0.1); border-radius: 12px; width: 300px; flex-shrink: 0; }
 .add-list-form-container input { width: 100%; background: transparent; border: none; padding: 1rem; font-size: 1rem; color: var(--text-color); outline: none; }
 .card { background-color: var(--card-bg); padding: 0.8rem 1rem; border-radius: 6px; margin-bottom: 0.8rem; cursor: pointer; word-break: break-word; box-shadow: 0 2px 4px var(--shadow-color); border: 1px solid var(--border-color); border-left: 4px solid; display: flex; flex-direction: column; justify-content: space-between; min-height: 80px; }
@@ -152,7 +159,7 @@ body.theme-dark {
 #obs-notification-badge { position: absolute; top: -4px; right: -4px; width: 12px; height: 12px; background-color: var(--status-urgente); border-radius: 50%; border: 2px solid var(--floating-bg); }
 #observations-panel { position: fixed; top: 0; right: 0; width: 340px; height: 100vh; background-color: var(--floating-bg); backdrop-filter: blur(10px); border-left: 1px solid var(--border-color); box-shadow: -5px 0 15px var(--shadow-color); z-index: 1500; transform: translateX(100%); transition: transform 0.3s ease; }
 #observations-panel.open { transform: translateX(0); }
-.obs-content { padding: 1.5rem; display: flex; flex-direction: column; height: 100%; max-height: 100vh; box-sizing: border-box; }
+.obs-content { padding: 1.5rem; display: flex; flex-direction: column; height: 100%; max-height: 100vh; }
 .obs-header { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
 #obs-list { flex-grow: 1; overflow-y: auto; margin-bottom: 1rem; min-height: 0; }
 #obs-form { flex-shrink: 0; }
@@ -163,7 +170,7 @@ body.theme-dark {
 .obs-item p { word-break: break-word; white-space: pre-wrap; line-height: 1.4; padding-right: 20px; }
 .obs-meta { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem; opacity: 0.7; }
 #obs-form button { background-color: var(--accent-color); border: none; border-radius: 6px; padding: 0.8rem; color: white; cursor: pointer; width: 100%; }
-.form-input { width: 100%; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-color); padding: 0.8rem; margin-bottom: 0.8rem; resize: vertical; box-sizing: border-box; }
+.form-input { width: 100%; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-color); padding: 0.8rem; margin-bottom: 0.8rem; resize: vertical; }
 
 /* Modal Geral e de Notificação */
 .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
@@ -233,35 +240,23 @@ body.theme-dark {
 .filter-container { display: flex; align-items: center; gap: 0.5rem; background-color: var(--card-bg); padding: 0.5rem; border-radius: 8px; }
 .filter-btn { background: none; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
 .filter-btn.active, .filter-btn:hover { color: white; background-color: var(--accent-color); border-color: var(--accent-color); }
-/* ... (todo o código CSS anterior está aqui, sem alterações) ... */
 
-/* --- CORREÇÃO DE RESPONSIVIDADE PARA TELAS PEQUENAS --- */
+/* Responsividade */
 @media (max-width: 480px) {
     .auth-box {
         width: 90%;
         padding: 2rem 1.5rem;
     }
-
     .header-controls {
         gap: 0.5rem;
         flex-wrap: wrap;
         justify-content: flex-end;
     }
-
     .main-header {
         padding: 1rem;
     }
-
-    .board-container {
+    .board-container, .calendar-container, .team-container {
         padding: 1rem;
         gap: 1rem;
-    }
-
-    .calendar-container {
-        padding: 1rem;
-    }
-    
-    .team-container {
-        padding: 1rem;
     }
 }
