@@ -1,0 +1,20 @@
+<main class="board-container" id="boardContainer"></main>
+
+<div class="add-list-form-container" id="add-list-form-container" style="display: none;">
+    <input type="text" placeholder="+ Adicionar outra lista" autocomplete="off">
+</div>
+
+<div id="card-modal" class="modal-backdrop hidden">
+    <div class="modal-content">
+        <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+        <textarea id="modal-card-title-edit" class="modal-textarea-title"></textarea>
+        <p class="modal-label">Status da Tarefa</p>
+        <div id="modal-status-options" class="status-options"></div>
+        <p class="modal-label">Descrição</p>
+        <textarea id="modal-card-description-edit" class="modal-textarea-desc"></textarea>
+        <div class="modal-actions" style="justify-content: space-between;">
+            <button id="delete-card-btn" class="delete-button">Excluir Cartão</button>
+            <button id="save-modal-btn" class="save-button">Guardar Alterações</button>
+        </div>
+    </div>
+</div>
