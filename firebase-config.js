@@ -2,15 +2,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD4s_sjF1aMOH9ocJSSWFZSU8B3Ul7NGz0",
-  authDomain: "taskontask.firebaseapp.com",
-  projectId: "taskontask",
-  storageBucket: "taskontask.appspot.com",
-  messagingSenderId: "496889403759",
-  appId: "1:496889403759:web:6550935b989672cddcf09a",
-  measurementId: "G-KN8Y1ZP2J1"
-};
+// Importa a configuração do arquivo "env.js" que NÃO está no controle de versão.
+// Isso mantém suas chaves secretas seguras.
+import { firebaseConfig } from './env.js';
+
+// Verifica se as chaves foram carregadas. Se não, lança um erro claro.
+if (!firebaseConfig || !firebaseConfig.apiKey) {
+  throw new Error("Configuração do Firebase não encontrada ou incompleta. Crie o arquivo 'env.js' a partir de 'env-example.js' e adicione suas credenciais.");
+}
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

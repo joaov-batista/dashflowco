@@ -1,0 +1,48 @@
+<main id="calendar-container" class="calendar-container"></main>
+
+<div id="create-event-modal" class="modal-backdrop hidden">
+    <div class="modal-content">
+        <button id="create-event-modal-close-btn" class="modal-close-btn">&times;</button>
+        <h2 id="create-event-modal-title">Novo Evento na Agenda</h2>
+        <form id="create-event-form">
+            <input type="text" id="create-event-title" class="form-input" placeholder="Título do Evento" required>
+            <textarea id="create-event-description" class="form-input" placeholder="Descrição (opcional)" rows="3"></textarea>
+            <label for="create-event-start-date">Data de Início:</label>
+            <input type="date" id="create-event-start-date" class="form-input" required>
+            <label for="create-event-end-date">Data de Término (opcional):</label>
+            <input type="date" id="create-event-end-date" class="form-input">
+            <button type="submit" class="save-button">Salvar Evento</button>
+        </form>
+    </div>
+</div>
+
+<div id="view-event-modal" class="modal-backdrop hidden">
+    <div class="modal-content">
+        <button id="view-event-modal-close-btn" class="modal-close-btn">&times;</button>
+        <div id="event-display-view">
+            <h2 id="view-event-title">Título do Evento</h2>
+            <div class="profile-details">
+                <p><strong>De:</strong> <span id="view-event-start-date"></span></p>
+                <p><strong>Até:</strong> <span id="view-event-end-date"></span></p>
+                <p><strong>Descrição:</strong> <span id="view-event-description"></span></p>
+                <p><strong>Criado por:</strong> <span id="view-event-created-by"></span></p>
+            </div>
+        </div>
+        <div id="event-edit-view" class="hidden">
+            <h2>Editar Evento</h2>
+            <form id="edit-event-form">
+                <input type="text" id="edit-event-title" class="form-input" required>
+                <textarea id="edit-event-description" class="form-input" rows="3"></textarea>
+                <label for="edit-event-start-date">Data de Início:</label>
+                <input type="date" id="edit-event-start-date" class="form-input" required>
+                <label for="edit-event-end-date">Data de Término (opcional):</label>
+                <input type="date" id="edit-event-end-date" class="form-input">
+            </form>
+        </div>
+        <div id="view-event-actions" class="modal-actions">
+            <button id="delete-event-btn" class="delete-button">Excluir</button>
+            <button id="edit-event-btn" class="filter-btn">Editar</button>
+            <button id="save-event-changes-btn" class="save-button hidden">Salvar Alterações</button>
+        </div>
+    </div>
+</div>

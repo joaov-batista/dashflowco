@@ -1,81 +1,164 @@
 import { auth, db } from './firebase-config.js';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { collection, query, where, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-import { showNotification } from './main.js'; 
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, fetchSignInMethodsForEmail } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { collection, query, where, getDocs, setDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { showNotification } from './main.js';
 
+// --- Elementos do DOM ---
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
 const toggleButton = document.getElementById('toggle-auth-mode');
 const authTitle = document.getElementById('auth-title');
+const phoneInput = document.getElementById('register-phone');
 
+// --- Máscara de Telefone ---
+phoneInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    value = value.substring(0, 11);
+    if (value.length > 6) { value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3'); }
+    else if (value.length > 2) { value = value.replace(/^(\d{2})(\d{0,5}).*/, '($1) $2'); }
+    else if (value.length > 0) { value = value.replace(/^(\d*)/, '($1'); }
+    e.target.value = value;
+});
+
+// --- Funções de Validação e Cálculo ---
+function calculateAge(dobString) {
+    const today = new Date();
+    const birthDate = new Date(dobString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
+async function validateRegistration(data) {
+    const errors = [];
+    const { name, email, password, userFunction, dob, phone, address, inviteCode } = data;
+
+    // --- NOVA VALIDAÇÃO ---
+    // Verifica se algum campo está vazio
+    if (!name || !email || !password || !userFunction || !dob || !phone || !address || !inviteCode) {
+        errors.push("Todos os campos são obrigatórios.");
+        return errors; // Retorna imediatamente se algum campo estiver vazio
+    }
+
+    // Validações específicas
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.push("Formato de e-mail inválido.");
+    } else {
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+        if (methods.length > 0) {
+            errors.push("Este e-mail já está em uso.");
+        }
+    }
+
+    if (password.length > 8) {
+        errors.push("A senha deve ter no máximo 8 caracteres.");
+    }
+
+    const age = calculateAge(dob);
+    if (age < 5 || age > 100) {
+        errors.push("Idade inválida. Deve ser entre 5 e 100 anos.");
+    }
+
+    if (name.length < 3 || !/\D/.test(name)) { errors.push("Nome inválido. Deve ter pelo menos 3 letras."); }
+    const phoneDigits = phone.replace(/\D/g, '');
+    if (phoneDigits.length < 10 || phoneDigits.length > 11) { errors.push("Número de telefone inválido."); }
+
+    return errors;
+}
+
+// --- Event Listeners ---
 loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    sessionStorage.clear(); 
-    const email = loginForm['login-email'].value;
+    const email = loginForm['login-email'].value.trim();
     const password = loginForm['login-password'].value;
     try {
-        await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = 'quadro.html';
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        if (!userCredential.user.emailVerified) {
+            showNotification("Verificação Pendente", "Seu e-mail ainda não foi verificado. Verifique sua caixa de entrada e spam.");
+            await signOut(auth);
+            return;
+        }
+        window.location.href = 'app.html';
     } catch (error) {
-        console.error("Login error:", error);
-        showNotification("Erro de Login", "Email ou senha inválidos. Por favor, tente novamente.");
+        showNotification("Erro de Login", "E-mail ou senha inválidos.");
     }
 });
 
 registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const submitButton = registerForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Registando...';
     
-    const name = registerForm['register-name'].value;
-    const email = registerForm['register-email'].value;
-    const password = registerForm['register-password'].value;
-    const userFunction = registerForm['register-function'].value;
-    const age = registerForm['register-age'].value;
-    const phone = registerForm['register-phone'].value;
-    const address = registerForm['register-address'].value;
-    const inviteCode = registerForm['register-invite-code'].value.trim();
+    const formData = {
+        name: registerForm['register-name'].value.trim(),
+        email: registerForm['register-email'].value.trim(),
+        password: registerForm['register-password'].value,
+        userFunction: registerForm['register-function'].value.trim(),
+        dob: registerForm['register-dob'].value,
+        phone: registerForm['register-phone'].value.trim(),
+        address: registerForm['register-address'].value.trim(),
+        inviteCode: registerForm['register-invite-code'].value.trim()
+    };
 
-    if (!name || !email || !password || !inviteCode) {
-        showNotification("Erro de Registro", "Por favor, preencha todos os campos obrigatórios.");
-        return;
-    }
-     if (password.length < 6) {
-        showNotification("Erro de Registro", "A senha precisa ter no mínimo 6 caracteres.");
+    const validationErrors = await validateRegistration(formData);
+    if (validationErrors.length > 0) {
+        showNotification("Erro de Registro", validationErrors[0]);
+        submitButton.disabled = false;
+        submitButton.textContent = 'Registar na Equipe';
         return;
     }
 
     try {
         const teamsRef = collection(db, 'teams');
-        const q = query(teamsRef, where("inviteCode", "==", inviteCode));
+        const q = query(teamsRef, where("inviteCode", "==", formData.inviteCode));
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
             showNotification("Erro de Registro", "Código de convite inválido.");
-            return;
+            throw new Error("Código inválido");
         }
         
         const teamId = querySnapshot.docs[0].id;
         
-        // Lógica de "primeiro usuário vira admin" foi REMOVIDA para evitar erros de permissão.
-        // O primeiro usuário deve ser promovido a admin manualmente.
-        const userRole = 'funcionário';
-
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
         const user = userCredential.user;
+        
+        await sendEmailVerification(user);
+
+        const age = calculateAge(formData.dob);
 
         await setDoc(doc(db, 'users', user.uid), {
-            uid: user.uid, displayName: name, email: user.email, role: userRole,
-            function: userFunction, age, phone, address, teamId, status: 'Offline'
+            uid: user.uid,
+            displayName: formData.name,
+            email: user.email,
+            role: 'funcionário',
+            function: formData.userFunction,
+            dob: formData.dob,
+            age: age,
+            phone: formData.phone,
+            address: formData.address,
+            teamId,
+            status: 'Offline',
+            createdAt: serverTimestamp()
         });
         
-        window.location.href = 'quadro.html';
-
+        showNotification("Registro Quase Completo!", "Enviamos um e-mail de verificação para sua conta. Por favor, verifique sua caixa de entrada e também a pasta de SPAM para ativar seu acesso.");
+        
+        registerForm.reset();
+        toggleButton.click();
+        
     } catch (error) {
         console.error("Register error:", error);
-        if (error.code === 'auth/email-already-in-use') {
-            showNotification("Erro de Registro", "Este email já está em uso.");
-        } else {
-            showNotification("Erro de Registro", "Não foi possível criar a conta. Verifique os dados e tente novamente.");
+        if (!error.message.includes("Código inválido")) {
+           showNotification("Erro de Registro", "Não foi possível criar a conta. Tente novamente.");
         }
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Registar na Equipe';
     }
 });
 

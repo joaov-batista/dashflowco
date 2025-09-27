@@ -1,0 +1,39 @@
+<main id="team-container" class="team-container"></main>
+
+<div id="member-modal" class="modal-backdrop hidden">
+    <div class="modal-content">
+        <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+        <h2 id="modal-member-name">Nome do Funcionário</h2>
+        <div class="profile-details">
+            <p><strong>Email:</strong> <span id="modal-member-email"></span></p>
+            <p><strong>Cargo:</strong> <span id="modal-member-role"></span></p>
+            <p><strong>Função:</strong> <span id="modal-member-function"></span></p>
+            <p><strong>Idade:</strong> <span id="modal-member-age"></span></p>
+            <p><strong>Telefone:</strong> <span id="modal-member-phone"></span></p>
+            <p><strong>Endereço:</strong> <span id="modal-member-address"></span></p>
+        </div>
+        
+        <div id="admin-section" class="admin-section hidden">
+            <hr class="form-divider">
+            <h3>Ações de Gerenciamento</h3>
+            <div class="role-management">
+                <label for="role-select">Alterar Cargo:</label>
+                <select id="role-select">
+                    <option value="funcionário">Funcionário</option>
+                    <option value="gerente">Gerente</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button id="save-role-btn" class="save-button">Salvar</button>
+            </div>
+            <button id="ban-member-btn" class="delete-button">Banir Funcionário</button>
+        </div>
+
+        <div id="logs-section" class="admin-section hidden">
+            <hr class="form-divider">
+            <h3>Relatório de Atividade</h3>
+            <div id="modal-member-logs" class="logs-container">
+                <p>Carregando logs...</p>
+            </div>
+        </div>
+    </div>
+</div>
