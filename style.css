@@ -201,9 +201,27 @@ body.theme-dark {
 .role-management select { background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem; flex-grow: 1; }
 .role-management .save-button { padding: 0.5rem 1rem; }
 #ban-member-btn { width: 100%; padding: 0.8rem; background-color: var(--status-urgente); color: white; }
+.logs-container { max-height: 200px; overflow-y: auto; background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 6px; padding: 1rem; margin-top: 1rem; }
+.log-entry { padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+.log-entry:last-child { border-bottom: none; }
+.log-date { font-size: 0.8rem; color: var(--text-secondary); }
 
 /* Calendário */
-.calendar-container { padding: 2rem; flex-grow: 1; overflow-y: auto; }
+/* CORREÇÃO APLICADA AQUI */
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto; /* Permite a rolagem vertical */
+    padding: 2rem;
+    height: 100%; /* Garante que o container tente ocupar o espaço */
+}
+
+.fc {
+    min-height: 0; /* Permite que o calendário encolha */
+    flex-grow: 1; /* Permite que o calendário cresça */
+}
+
 .fc .fc-toolbar-title { color: var(--text-color); }
 .fc .fc-daygrid-day-number { color: var(--text-secondary); text-decoration: none; }
 .goto-date-form { display: flex; align-items: center; gap: 0.5rem; }
@@ -214,13 +232,11 @@ body.theme-dark {
 .filter-btn { background: none; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; text-decoration: none; }
 .filter-btn.active, .filter-btn:hover { color: white; background-color: var(--accent-color); border-color: var(--accent-color); }
 
-
 /* ESTILO DA BARRA DE ROLAGEM */
 ::-webkit-scrollbar { width: 12px; height: 12px; }
 ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
 ::-webkit-scrollbar-thumb { background-color: var(--accent-color-darker); border-radius: 10px; border: 3px solid var(--card-bg); }
 ::-webkit-scrollbar-thumb:hover { background-color: var(--accent-color); }
-
 
 /* RESPONSIVIDADE */
 #mobile-menu-btn { display: none; }
@@ -231,36 +247,8 @@ body.theme-dark {
     #mobile-menu-btn { display: flex; align-items: center; justify-content: center; background: none; border: 1px solid var(--border-color); color: var(--text-secondary); width: 38px; height: 38px; border-radius: 6px; cursor: pointer; }
     .main-header { padding: 1rem; }
     .header-controls { flex-wrap: wrap; gap: 0.5rem; }
-    .board-container { flex-direction: column; align-items: center; overflow-x: hidden; overflow-y: auto; padding: 1rem; gap: 1rem; }
+    .board-container { flex-direction: column; align-items: center; overflow-x: hidden; overflow-y: auto; padding: 1rem; gap: 1rem; position: static; } /* Remove position absolute no mobile */
     .list, .add-list-form-container { width: 100%; max-width: 450px; }
-    .team-container { grid-template-columns: 1fr; padding: 1rem; gap: 1rem; }
-    .calendar-container { padding: 1rem; }
-}
-/* Adicione no final do seu style.css */
-
-.logs-container {
-    max-height: 200px;
-    overflow-y: auto;
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 1rem;
-    margin-top: 1rem;
-}
-
-.log-entry {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.log-entry:last-child {
-    border-bottom: none;
-}
-
-.log-date {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+    .team-container, .calendar-container { padding: 1rem; }
+    .team-container { grid-template-columns: 1fr; }
 }
