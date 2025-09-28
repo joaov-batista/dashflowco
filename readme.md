@@ -2,7 +2,8 @@
 
 <img width="1919" height="1079" alt="Captura de tela 2025-09-28 140855" src="https://github.com/user-attachments/assets/bedb568a-4d30-4a69-b36b-88aaa9c35be2" />**DashFlowCo** é uma aplicação web completa (SaaS) projetada para otimizar o fluxo de trabalho e a comunicação em equipes. A plataforma oferece um conjunto de ferramentas integradas para gerenciamento de tarefas, comunicação em tempo real e organização de agendas, tudo em uma interface rápida, segura e responsiva.
 
-**Teste em: https://dashflowco.vercel.app/**
+**Para testar entre: https://dashflowco.vercel.app/**
+**Utilize o codigo de convite: BETA123**
 
 ---
 
