@@ -207,7 +207,6 @@ body.theme-dark {
 .log-date { font-size: 0.8rem; color: var(--text-secondary); }
 
 /* Calendário */
-/* CORREÇÃO APLICADA AQUI */
 .calendar-container {
     display: flex;
     flex-direction: column;
